@@ -1,0 +1,19 @@
+# 🔴 Virtual Environment
+venv/
+
+# 🔴 Python cache
+__pycache__/
+*.pyc
+
+# 🔴 Environment variables (VERY IMPORTANT)
+.env
+
+# 🔴 VS Code settings
+.vscode/
+
+# 🔴 OS junk
+.DS_Store
+Thumbs.db
+
+# 🔴 Logs
+*.log
