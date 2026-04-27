@@ -52,12 +52,6 @@ def job_to_row(job, country_name, role_id, role_name):
 # 🚀 MAIN LOGIC
 # ==============================
 def main():
-    # 📅 DATE GUARD — only runs on the 25th of the month
-    today = datetime.date.today()
-    if today.day != 25:
-        print(f"⏭️ Skipping — today is the {today.day}th, not the 25th.")
-        return
-
     print("🚀 Starting job scraper...")
 
     # 📂 Load roles
