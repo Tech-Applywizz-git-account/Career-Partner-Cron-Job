@@ -15,7 +15,7 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 # ⚙️ SETTINGS
 # ==============================
 RESULTS_PER_COUNTRY = 100
-HOURS_OLD = 48
+HOURS_OLD = 24
 BATCH_SIZE = 500
 
 # ==============================
