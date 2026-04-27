@@ -1,3 +1,4 @@
+import datetime
 import pandas as pd
 import threading
 from supabase import create_client, Client
@@ -5,15 +6,15 @@ from jobspy_enhanced.indeed import Indeed
 from jobspy_enhanced.model import Country, Site, ScraperInput, DescriptionFormat
 
 
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+SUPABASE_URL = "https://tbfcxawbygftalalhvlf.supabase.co"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRiZmN4YXdieWdmdGFsYWxodmxmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNTA1NjcsImV4cCI6MjA5MTgyNjU2N30.REhIuOmOHJHxXowe0z754lYYXU539t-JsQ2Ymbnw1VI"
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # ==============================
 # ⚙️ SETTINGS
 # ==============================
-RESULTS_PER_COUNTRY = 25
+RESULTS_PER_COUNTRY = 100
 HOURS_OLD = 24
 BATCH_SIZE = 500
 
@@ -51,6 +52,12 @@ def job_to_row(job, country_name, role_id, role_name):
 # 🚀 MAIN LOGIC
 # ==============================
 def main():
+    # 📅 DATE GUARD — only runs on the 25th of the month
+    today = datetime.date.today()
+    if today.day != 25:
+        print(f"⏭️ Skipping — today is the {today.day}th, not the 25th.")
+        return
+
     print("🚀 Starting job scraper...")
 
     # 📂 Load roles
