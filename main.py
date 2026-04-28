@@ -1,3 +1,4 @@
+import os  # ✅ ADDED
 import datetime
 import pandas as pd
 import threading
@@ -6,8 +7,12 @@ from jobspy_enhanced.indeed import Indeed
 from jobspy_enhanced.model import Country, Site, ScraperInput, DescriptionFormat
 
 
-SUPABASE_URL = "https://tbfcxawbygftalalhvlf.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRiZmN4YXdieWdmdGFsYWxodmxmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNTA1NjcsImV4cCI6MjA5MTgyNjU2N30.REhIuOmOHJHxXowe0z754lYYXU539t-JsQ2Ymbnw1VI"
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+
+# ✅ ADDED SAFETY CHECK
+if not SUPABASE_URL or not SUPABASE_KEY:
+    raise Exception("❌ Missing Supabase credentials. Check GitHub Secrets.")
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
