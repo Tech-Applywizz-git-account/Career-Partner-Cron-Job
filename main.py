@@ -32,7 +32,8 @@ SCRAPE_LOCK = threading.Lock()
 # 🌍 GET COUNTRIES
 # ==============================
 def get_countries():
-    return [c for c in Country if c.name not in ["US_CANADA", "WORLDWIDE"]]
+    # ✅ UPDATED: Exclude USA as well
+    return [c for c in Country if c.name not in ["US_CANADA", "WORLDWIDE", "USA"]]
 
 # ==============================
 # 🔄 CONVERT JOB → ROW
@@ -90,6 +91,11 @@ def main():
                     response = scraper.scrape(scraper_input)
 
                 for job in response.jobs:
+                    # ✅ ADDED: Extra safety to skip US jobs
+                    if job.location and job.location.country:
+                        if str(job.location.country).lower() in ["usa", "united states"]:
+                            continue
+
                     all_jobs.append(
                         job_to_row(job, country.name, role_id, role_name)
                     )
