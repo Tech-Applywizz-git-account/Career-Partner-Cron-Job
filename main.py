@@ -20,7 +20,7 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 # ⚙️ SETTINGS
 # ==============================
 RESULTS_PER_COUNTRY = 100
-HOURS_OLD = 24
+HOURS_OLD = 72 # Temporarily set to 72 hours for backfilling salary data
 BATCH_SIZE = 500
 
 # ==============================
@@ -39,7 +39,7 @@ def get_countries():
 # 🔄 CONVERT JOB → ROW
 # ==============================
 def job_to_row(job, country_name, role_id, role_name):
-    return {
+    row = {
         "role_id": role_id,
         "role_name": role_name,
         "indeed_search_country": country_name,
@@ -52,11 +52,27 @@ def job_to_row(job, country_name, role_id, role_name):
         "date_posted": str(job.date_posted) if job.date_posted else None,
         "is_remote": job.is_remote,
         "description": (job.description or "")[:30000],
-        "min_amount": job.compensation.min_amount if job.compensation else None,
-        "max_amount": job.compensation.max_amount if job.compensation else None,
-        "currency": job.compensation.currency if job.compensation else None,
-        "interval": job.compensation.interval.value if job.compensation and job.compensation.interval else None,
     }
+    
+    # Format salary into a single string to match the 'salary text' column in Supabase
+    if job.compensation:
+        comp = job.compensation
+        salary_str = ""
+        if comp.min_amount and comp.max_amount:
+            salary_str = f"${comp.min_amount:,.0f} - ${comp.max_amount:,.0f}"
+        elif comp.min_amount:
+            salary_str = f"${comp.min_amount:,.0f}+"
+        elif comp.max_amount:
+            salary_str = f"Up to ${comp.max_amount:,.0f}"
+            
+        if salary_str:
+            row["salary"] = f"{salary_str} {comp.currency or 'USD'} ({comp.interval.value if comp.interval else 'N/A'})"
+        else:
+            row["salary"] = None
+    else:
+        row["salary"] = None
+        
+    return row
 
 # ==============================
 # 🚀 MAIN LOGIC
