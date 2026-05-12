@@ -52,6 +52,10 @@ def job_to_row(job, country_name, role_id, role_name):
         "date_posted": str(job.date_posted) if job.date_posted else None,
         "is_remote": job.is_remote,
         "description": (job.description or "")[:30000],
+        "min_amount": job.compensation.min_amount if job.compensation else None,
+        "max_amount": job.compensation.max_amount if job.compensation else None,
+        "currency": job.compensation.currency if job.compensation else None,
+        "interval": job.compensation.interval.value if job.compensation and job.compensation.interval else None,
     }
 
 # ==============================
