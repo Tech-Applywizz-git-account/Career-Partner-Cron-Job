@@ -20,7 +20,7 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 # ⚙️ SETTINGS
 # ==============================
 RESULTS_PER_COUNTRY = 100
-HOURS_OLD = 72 # Temporarily set to 72 hours for backfilling salary data
+HOURS_OLD = 24 # Temporarily set to 72 hours for backfilling salary data
 BATCH_SIZE = 500
 
 # ==============================
